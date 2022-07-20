@@ -11,4 +11,4 @@ const foodSchema = new Schema({
   // owner will be added later on
 });
 
-module.exports = model("Project", foodSchema);
+module.exports = model("Food", foodSchema);

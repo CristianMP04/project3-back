@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const Task = require('../models/Task.model');
-const Project = require('../models/Project.model');
+const Project = require('../models/food.model');
 
 //  POST /api/tasks  -  Creates a new task
 router.post('/tasks', (req, res, next) => {
