@@ -1,5 +1,5 @@
 ### Instructions
-MIS NIÑOS GUAPOS
+
 #### Instala dependencias
 - npm i
 #### Crea archivo .env y agrega variables de entorno
