@@ -1,19 +1,28 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const User = require('../models/User.model')
 
 
 const Foods = require('../models/Food.model');
 
 //  POST /api/projects  -  Creates a new project
-router.post('/foods/favorites/:id_user/:id_food', (req, res, next) => {
-	const { id_user, id_food } = req.params;
-	console.log(id_food , id_user)
-	console.log(req.payload)
+router.post('/foods/favorites/:id_food', (req, res, next) => {
+	const { id_food } = req.params; // parametros de url
+	const id_user = req.payload._id // magia negra
+// req.body info añadida en formularios post
+	User.findByIdAndUpdate(
+		{ 
+			_id: id_user
+		},
+		{                        
+			$push: { favorites: id_food }},
+		).then(() => res.redirect(`hi`))
+})
 	//Foods.create({ title, description, tasks: [] })
 	//	.then((response) => res.json(response))
 	//	.catch((err) => res.json(err));
-});
+
 
 //  GET /api/projects -  Retrieves all of the projects
 router.get('/projects', (req, res, next) => {
