@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Project = require('../models/food.model');
+const Foods = require('../models/food.model');
 
 //  POST /api/projects  -  Creates a new project
-router.post('/projects', (req, res, next) => {
-	const { title, description } = req.body;
-
-	Project.create({ title, description, tasks: [] })
-		.then((response) => res.json(response))
-		.catch((err) => res.json(err));
+router.post('/foods/favorites/:id_user/:id_food', (req, res, next) => {
+	const { id_user, id_food } = req.params;
+	console.log(id_food , id_user)
+	console.log(req.payload)
+	//Foods.create({ title, description, tasks: [] })
+	//	.then((response) => res.json(response))
+	//	.catch((err) => res.json(err));
 });
 
 //  GET /api/projects -  Retrieves all of the projects
 router.get('/projects', (req, res, next) => {
-	Project.find().then((allProjects) => res.json(allProjects)).catch((err) => res.json(err));
+	Foods.find().then((allProjects) => res.json(allProjects)).catch((err) => res.json(err));
 });
 
 //  GET /api/projects/:projectId -  Retrieves a specific project by id
@@ -29,7 +30,7 @@ router.get('/projects/:projectId', (req, res, next) => {
 
 	// Each Project document has `tasks` array holding `_id`s of Task documents
 	// We use .populate() method to get swap the `_id`s for the actual Task documents
-	Project.findById(projectId)
+	Foods.findById(projectId)
 		.populate('tasks')
 		.then((project) => res.status(200).json(project))
 		.catch((error) => res.json(error));
@@ -44,7 +45,7 @@ router.put('/projects/:projectId', (req, res, next) => {
 		return;
 	}
 
-	Project.findByIdAndUpdate(projectId, req.body, { new: true })
+	Foods.findByIdAndUpdate(projectId, req.body, { new: true })
 		.then((updatedProject) => res.json(updatedProject))
 		.catch((error) => res.json(error));
 });
@@ -58,7 +59,7 @@ router.delete('/projects/:projectId', (req, res, next) => {
 		return;
 	}
 
-	Project.findByIdAndRemove(projectId)
+	Foods.findByIdAndRemove(projectId)
 		.then(() =>
 			res.json({
 				message: `Project with ${projectId} is removed successfully.`
