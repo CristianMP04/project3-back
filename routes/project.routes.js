@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
+
 const Foods = require('../models/Food.model');
 
 //  POST /api/projects  -  Creates a new project
@@ -35,7 +36,7 @@ router.get('/projects/:projectId', (req, res, next) => {
 		.then((project) => res.status(200).json(project))
 		.catch((error) => res.json(error));
 });
-router.get("/favorites", isLoggedIn, (req, res, next) =>{
+router.get("/favorites", (req, res, next) =>{
 
 	User.findById(req.session.currentUser._id)
 	.populate('favorites')
