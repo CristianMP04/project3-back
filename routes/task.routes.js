@@ -2,17 +2,17 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Task = require('../models/Task.model');
-const Project = require('../models/food.model');
+const Food = require('../models/Food.model')
+
 
 //  POST /api/tasks  -  Creates a new task
-router.post('/tasks', (req, res, next) => {
-	const { title, description, projectId } = req.body;
+router.post('/profile', (req, res, next) => {
+	const { email, password, name, favorites } = req.params;
 
-	Task.create({ title, description, project: projectId })
-		.then((newTask) => {
-			return Project.findByIdAndUpdate(projectId, {
-				$push: { tasks: newTask._id }
+		Food
+		.then((newFavorite) => {
+			return Food.findByIdAndUpdate(foodId, {
+				$push: { favorite: newFavorite._id }
 			});
 		})
 		.then((response) => res.json(response))

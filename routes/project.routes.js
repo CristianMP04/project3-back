@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const Foods = require('../models/food.model');
+const Foods = require('../models/Food.model');
 
 //  POST /api/projects  -  Creates a new project
 router.post('/foods/favorites/:id_user/:id_food', (req, res, next) => {
@@ -35,6 +35,17 @@ router.get('/projects/:projectId', (req, res, next) => {
 		.then((project) => res.status(200).json(project))
 		.catch((error) => res.json(error));
 });
+router.get("/favorites", isLoggedIn, (req, res, next) =>{
+
+	User.findById(req.session.currentUser._id)
+	.populate('favorites')
+	.then((user) => {
+	  res.render("recipes/favorites", {favorites: user.favorites});
+	  
+	})
+   
+  
+  })
 
 // PUT  /api/projects/:projectId  -  Updates a specific project by id
 router.put('/projects/:projectId', (req, res, next) => {
