@@ -5,8 +5,10 @@ const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   name: { type: String, required: true },
-  favorites: {type: Schema.Types.ObjectId,
-    ref: 'Food'}
+  favorites: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Food'
+  }]
 
 });
 

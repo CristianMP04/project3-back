@@ -10,14 +10,18 @@ const Foods = require('../models/Food.model');
 router.post('/foods/favorites/:id_food', (req, res, next) => {
 	const { id_food } = req.params; // parametros de url
 	const id_user = req.payload._id // magia negra
+	console.log(id_food + " ASDADAD " + id_user)
 // req.body info añadida en formularios post
 	User.findByIdAndUpdate(
 		{ 
 			_id: id_user
 		},
+		{
+			$addToSet: {favorites:id_food} // El addToSet es un comando de mongodb que comprueba que no esté repetido. 
+		},
 		{                        
 			$push: { favorites: id_food }},
-		).then(() => res.redirect(`hi`))
+		).then(() => console.log(""))
 })
 	//Foods.create({ title, description, tasks: [] })
 	//	.then((response) => res.json(response))
@@ -47,15 +51,15 @@ router.get('/projects/:projectId', (req, res, next) => {
 });
 router.get("/favorites", (req, res, next) =>{
 
-	User.findById(req.session.currentUser._id)
+	User.findOne({_id: req.payload._id})
 	.populate('favorites')
 	.then((user) => {
-	  res.render("recipes/favorites", {favorites: user.favorites});
-	  
+		console.log(user)
+		res.json(user)
 	})
-   
-  
+	.catch((error) => res.json(error))
   })
+
 
 // PUT  /api/projects/:projectId  -  Updates a specific project by id
 router.put('/projects/:projectId', (req, res, next) => {
