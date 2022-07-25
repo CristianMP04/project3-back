@@ -76,21 +76,26 @@ router.put('/projects/:projectId', (req, res, next) => {
 });
 
 // DELETE  /api/projects/:projectId  -  Deletes a specific project by id
-router.delete('/projects/:projectId', (req, res, next) => {
-	const { projectId } = req.params;
+router.delete('/favorites/:foodId', (req, res, next) => {
+	const { foodId } = req.params;
+	console.log(foodId)
+	const id_user = req.payload._id // magia negra
+	console.log(id_user)
 
-	if (!mongoose.Types.ObjectId.isValid(projectId)) {
+	if (!mongoose.Types.ObjectId.isValid(foodId)) {
 		res.status(400).json({ message: 'Specified id is not valid' });
 		return;
 	}
-
-	Foods.findByIdAndRemove(projectId)
-		.then(() =>
+	User.findByIdAndUpdate(id_user,{$pull : {favorites : foodId}}).then(() =>{
+	
+	
 			res.json({
-				message: `Project with ${projectId} is removed successfully.`
+				message: `favorite with ${foodId} is removed successfully.`
 			})
-		)
-		.catch((error) => res.json(error));
+
+	
+	})
+	.catch((error) => res.json(error));
 });
 
 module.exports = router;
