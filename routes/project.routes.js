@@ -2,9 +2,13 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/User.model')
-
-
 const Foods = require('../models/Food.model');
+
+const dict = {
+	1: "Netflix & Chill",
+	2: "Con Amigos",
+	3: "Ulala sra./sr. sofisticad@, hoy triunfas."
+}
 
 //  POST /api/projects  -  Creates a new project
 router.post('/foods/favorites/:id_food', (req, res, next) => {
@@ -49,6 +53,19 @@ router.get('/projects/:projectId', (req, res, next) => {
 		.then((project) => res.status(200).json(project))
 		.catch((error) => res.json(error));
 });
+
+router.get('/tinder/:filterByType', (req,res,next) => {
+	const {filterByType} = req.params;
+	
+	const type = dict[filterByType]
+	Foods.find({type: type})
+	.then((foodList) => {
+		console.log(foodList)
+		res.json(foodList)
+	})
+	.catch((error) => res.json(error))
+
+})
 router.get("/favorites", (req, res, next) =>{
 
 	User.findOne({_id: req.payload._id})
