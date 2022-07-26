@@ -5,10 +5,13 @@ const foodSchema = new Schema({
   name: String,
   image: String,
   type:String,
-  restaurant:String,  
-  ubicacionLink:String,
-  href:String  
-  // owner will be added later on
+  restaurant:String,
+  review: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Review'
+  }]
+  
+ // owner will be added later on
 });
 
 module.exports = model("Food", foodSchema);
