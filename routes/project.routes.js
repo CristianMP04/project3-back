@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/User.model')
 const Foods = require('../models/Foods.model');
+const Review = require('../models/Review.model')
 
 const dict = {
 	1: "Netflix & Chill",
@@ -14,7 +15,6 @@ const dict = {
 router.post('/foods/favorites/:id_food', (req, res, next) => {
 	const { id_food } = req.params; // parametros de url
 	const id_user = req.payload._id // magia negra
-	console.log(id_food + " ASDADAD " + id_user)
 // req.body info añadida en formularios post
 	User.findByIdAndUpdate(
 		{ 
@@ -60,7 +60,6 @@ router.get('/tinder/:filterByType', (req,res,next) => {
 	const type = dict[filterByType]
 	Foods.find({type: type})
 	.then((foodList) => {
-		console.log(foodList)
 		res.json(foodList)
 	})
 	.catch((error) => res.json(error))
@@ -71,12 +70,41 @@ router.get("/favorites", (req, res, next) =>{
 	User.findOne({_id: req.payload._id})
 	.populate('favorites')
 	.then((user) => {
-		console.log(user)
 		res.json(user)
 	})
 	.catch((error) => res.json(error))
   })
 
+  router.post("/review", (req, res, next) => {
+    const { foodId, rating, title, review } = req.body;
+    Review.create({ title, rating, review })
+        .then((response) => {
+			Foods.findByIdAndUpdate(
+				{ 
+					_id: foodId
+				},
+				{
+					$addToSet: {review:response._id} // El addToSet es un comando de mongodb que comprueba que no esté repetido. 
+				},
+				{                        
+					$push: { review: response._id }},
+				).then((res) => console.log(res))
+
+
+			//res.json(response)
+		})
+
+        .catch((err) => res.json(err));
+	});
+
+router.get("/review/:id", (req, res) => {
+    const { id } = req.params
+    Review.find({movieId:id})
+        .then((result) => {
+            res.json(result)
+        })
+
+	})
 
 // PUT  /api/projects/:projectId  -  Updates a specific project by id
 router.put('/projects/:projectId', (req, res, next) => {
@@ -95,9 +123,7 @@ router.put('/projects/:projectId', (req, res, next) => {
 // DELETE  /api/projects/:projectId  -  Deletes a specific project by id
 router.delete('/favorites/:foodId', (req, res, next) => {
 	const { foodId } = req.params;
-	console.log(foodId)
 	const id_user = req.payload._id // magia negra
-	console.log(id_user)
 
 	if (!mongoose.Types.ObjectId.isValid(foodId)) {
 		res.status(400).json({ message: 'Specified id is not valid' });
