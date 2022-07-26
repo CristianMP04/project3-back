@@ -6,6 +6,8 @@ const foodSchema = new Schema({
   image: String,
   type:String,
   restaurant:String,
+  ubicacionLink:String,
+  href:String,
   review: [{
     type: Schema.Types.ObjectId,
     ref: 'Review'
