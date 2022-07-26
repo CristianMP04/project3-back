@@ -5,7 +5,12 @@ const foodSchema = new Schema({
   name: String,
   image: String,
   type:String,
-  restaurant:String
+  restaurant:String,
+  review: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Review'
+  }]
+  
   // owner will be added later on
 });
 
