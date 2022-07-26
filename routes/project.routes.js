@@ -25,7 +25,7 @@ router.post('/foods/favorites/:id_food', (req, res, next) => {
 		},
 		{                        
 			$push: { favorites: id_food }},
-		).then(() => console.log(""))
+		).then(() =>res.status(200).json("todo ok"))
 })
 	//Foods.create({ title, description, tasks: [] })
 	//	.then((response) => res.json(response))
