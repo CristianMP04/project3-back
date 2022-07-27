@@ -68,7 +68,15 @@ router.get('/tinder/:filterByType', (req,res,next) => {
 router.get("/favorites", (req, res, next) =>{
 
 	User.findOne({_id: req.payload._id})
-	.populate('favorites')
+	.populate('favorites') // <-- the same as .populate('author).populate('comments')
+    .populate({
+      // we are populating author in the previously populated comments
+      path: 'favorites',
+      populate: {
+        path: 'review',
+        model: 'Review'
+      }
+    })
 	.then((user) => {
 		res.json(user)
 	})
