@@ -69,15 +69,7 @@ router.get("/favorites", (req, res, next) =>{
 
 	User.findOne({_id: req.payload._id})
 	.populate('favorites') // <-- the same as .populate('author).populate('comments')
-    .populate({
-      // we are populating author in the previously populated comments
-      path: 'favorites',
-      populate: {
-        path: 'review',
-        model: 'Review'
-      }
-    })
-	.then((user) => {
+   	.then((user) => {
 		res.json(user)
 	})
 	.catch((error) => res.json(error))
@@ -105,10 +97,14 @@ router.get("/favorites", (req, res, next) =>{
         .catch((err) => res.json(err));
 	});
 
-router.get("/review/:id", (req, res) => {
-    const { id } = req.params
-    Review.find({movieId:id})
+router.get("/review/:foodId", (req, res) => {
+    const { foodId } = req.params
+	console.log("ads")
+	console.log(foodId)
+    Foods.find({_id: foodId})
+		.populate('review')
         .then((result) => {
+			console.log(result)
             res.json(result)
         })
 
